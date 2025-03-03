@@ -4,6 +4,7 @@
 #include <Adafruit_ST7789.h> // Hardware-specific library for ST7789
 #include <Adafruit_TCS34725.h>
 #include <SPI.h>
+#include <Wire.h>
 
 
 #define TFT_CS   (17)
@@ -16,6 +17,7 @@ Adafruit_ST7735 tft_(TFT_CS, TFT_DC, TFT_MOSI, TFT_SCLK, TFT_RST);
 
 Adafruit_TCS34725 tcs = Adafruit_TCS34725(TCS34725_INTEGRATIONTIME_2_4MS, TCS34725_GAIN_4X);
 Adafruit_TCS34725 tcsB = Adafruit_TCS34725();
+
 
 Servo servo1;
 Servo servo2;
@@ -68,7 +70,12 @@ int _Sensitive_B = 80;
 int current_degree_servo  = 90;
 
 
-
+void buzzer(int freq, int timr_delay) {
+  pinMode(7, OUTPUT);
+  tone(7, freq);
+  delay(timr_delay);
+  tone(7, 0);
+}
 void puppybot_setup() {
   analogWriteResolution(10);
   analogWriteRange(1023);
@@ -80,6 +87,7 @@ void puppybot_setup() {
    if (tcs.begin()) {
     Serial.println("Found sensor");
   }
+  buzzer(500,100);
 
 }
 int ADC(int analog_CH) {
@@ -114,12 +122,7 @@ void OUT(int _pins,uint8_t _Status){
   pinMode(_pins, OUTPUT); 
   digitalWrite(_pins,_Status);
 }
-void buzzer(int freq, int timr_delay) {
-  pinMode(7, OUTPUT);
-  tone(7, freq);
-  delay(timr_delay);
-  tone(7, 0);
-}
+
 void printText(uint8_t x,uint8_t y,String text,uint8_t size,uint16_t  color){
 	tft_.setCursor(x, y);
 	tft_.setTextSize(size);
@@ -256,17 +259,17 @@ void wait_SW1() {
     tft_.setTextSize(2);
     
 
-    drawString("0="+String(ADC(0))+' ',0,0);
-    drawString("1="+String(ADC(1))+' ',80,0);
-    drawString("2="+String(ADC(2))+' ',0,17);
-    drawString("3="+String(ADC(3))+' ',80,17);
-    drawString("4="+String(ADC(4))+' ',0,34);
-    drawString("5="+String(ADC(5))+' ',80,34);
-    drawString("6="+String(ADC(6))+' ',0,51);
-    drawString("7="+String(ADC(7))+' ',80,51);
-    drawString("8="+String(ADC(8))+' ',0,68);
-    drawString("9="+String(ADC(9))+' ',80,68);
-    drawString("10="+String(ADC(10))+' ',0,85);
+    drawString("0="+String(ADC(0))+"  ",0,0);
+    drawString("1="+String(ADC(1))+"  ",80,0);
+    drawString("2="+String(ADC(2))+"  ",0,17);
+    drawString("3="+String(ADC(3))+"  ",80,17);
+    drawString("4="+String(ADC(4))+"  ",0,34);
+    drawString("5="+String(ADC(5))+"  ",80,34);
+    drawString("6="+String(ADC(6))+"  ",0,51);
+    drawString("7="+String(ADC(7))+"  ",80,51);
+    drawString("8="+String(ADC(8))+"  ",0,68);
+    drawString("9="+String(ADC(9))+"  ",80,68);
+    drawString("10="+String(ADC(10))+"  ",0,85);
   } while (digitalRead(6) == 1);
   buzzer(500,100);
   delay(200);
