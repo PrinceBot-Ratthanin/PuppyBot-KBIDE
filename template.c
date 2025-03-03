@@ -1,28 +1,28 @@
 #include <Arduino.h>
-#include <puppybot.h>
 #include <KB_music.h>
 
-KB_music music;
+#ifndef I2C_ADDR
+#define I2C_ADDR 0x69
+#endif
 
-typedef int Number;
-typedef int Boolean;
+#include <puppybot.h>
+#include "PuppyBotIMU.h"
+#include "PuppyBotTurnPID.h"
 
-${EXTINC}
 
-${VARIABLE}
 
-${FUNCTION}
 
-void setup()
-{
+void setup() {
+  
   puppybot_setup();
-  music.begin();
-
+  Serial.begin(115200);
+  Serial.print("Runing.....");
   ${SETUP_CODE}
   ${BLOCKSETUP}
 }
-void loop()
-{
+
+void loop() {
   ${LOOP_CODE}
   ${LOOP_EXT_CODE}
+  
 }
