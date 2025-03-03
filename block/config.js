@@ -38,10 +38,6 @@ module.exports = {
                     </block>`
                 },
                 
-                //'TCS_color_config',
-                // {
-                //     xml: `<sep gap="25"></sep><label text="ถ้าใช้งาน color sensor 2 จะต้องต่อ SDA=Servo3 SCL=Servo4"headline"></label>`
-                // },
                 {
                     xml : 
                     `<block type="TCS_color_status_B">
@@ -53,7 +49,130 @@ module.exports = {
                     </block>`
                 },
                 'Ultrasonic_sensor',
-                //'Puppy_beep',
+                {
+                    xml: `<sep gap="25"></sep><label text="ใช้งาน IMU รุ่นใหม่ " web-class="main-content"></label>`
+                },
+                'IMU_begin',
+                'IMU_getData',
+                'IMU_getData_Yaw',
+                'IMU_TurnByAngle',
+                {xml:
+                      `<block type="IMU_set_dataFor_turnDirection">
+                            <value name="S0">
+                                <shadow type="math_number">
+                                    <field name="NUM">15</field>
+                                </shadow>
+                            </value>
+                            <value name="S1">
+                                <shadow type="math_number">
+                                    <field name="NUM">60</field>
+                                </shadow>
+                            </value>
+                            <value name="S2">
+                                <shadow type="math_number">
+                                    <field name="NUM">4</field>
+                                </shadow>
+                            </value>
+                            <value name="S3">
+                                <shadow type="math_number">
+                                    <field name="NUM">5</field>
+                                </shadow>
+                            </value>
+                        </block>`
+              },
+                'IMU_TurnByDirection',
+                {xml:
+                      `<block type="IMU_TurnPID">
+                            <value name="S0">
+                                <shadow type="math_number">
+                                    <field name="NUM">90</field>
+                                </shadow>
+                            </value>
+                            <value name="S1">
+                                <shadow type="math_number">
+                                    <field name="NUM">15</field>
+                                </shadow>
+                            </value>
+                            <value name="S2">
+                                <shadow type="math_number">
+                                    <field name="NUM">60</field>
+                                </shadow>
+                            </value>
+                            <value name="S3">
+                                <shadow type="math_number">
+                                    <field name="NUM">5</field>
+                                </shadow>
+                            </value>
+                            <value name="S4">
+                                <shadow type="math_number">
+                                    <field name="NUM">5</field>
+                                </shadow>
+                            </value>
+                        </block>`
+              },
+              {xml:
+                      `<block type="IMU_moveStraightPID">
+                            <value name="S0">
+                                <shadow type="math_number">
+                                    <field name="NUM">90</field>
+                                </shadow>
+                            </value>
+                            <value name="S1">
+                                <shadow type="math_number">
+                                    <field name="NUM">50</field>
+                                </shadow>
+                            </value>
+                            <value name="S2">
+                                <shadow type="math_number">
+                                    <field name="NUM">2000</field>
+                                </shadow>
+                            </value>
+                            <value name="S3">
+                                <shadow type="math_number">
+                                    <field name="NUM">1</field>
+                                </shadow>
+                            </value>
+                            <value name="S4">
+                                <shadow type="math_number">
+                                    <field name="NUM">0</field>
+                                </shadow>
+                            </value>
+                             <value name="S5">
+                                <shadow type="math_number">
+                                    <field name="NUM">0.5</field>
+                                </shadow>
+                            </value>
+                        </block>`
+              },
+              {xml:
+                      `<block type="IMU_moveStraightDirection">
+                            <value name="S1">
+                                <shadow type="math_number">
+                                    <field name="NUM">50</field>
+                                </shadow>
+                            </value>
+                            <value name="S2">
+                                <shadow type="math_number">
+                                    <field name="NUM">2000</field>
+                                </shadow>
+                            </value>
+                            <value name="S3">
+                                <shadow type="math_number">
+                                    <field name="NUM">1</field>
+                                </shadow>
+                            </value>
+                            <value name="S4">
+                                <shadow type="math_number">
+                                    <field name="NUM">0</field>
+                                </shadow>
+                            </value>
+                             <value name="S5">
+                                <shadow type="math_number">
+                                    <field name="NUM">0.5</field>
+                                </shadow>
+                            </value>
+                        </block>`
+              },
                 
             ]
         },
@@ -794,96 +913,96 @@ module.exports = {
 
                 ]
         },
-        //GPIO
-        {
-            name : 'GPIO',
-            index: 5,
-            color : '230',
-            icon : '/static/icons/icons8_electronics_96px.png',
-            blocks : [
-                {
-                    xml : 
-                    `<block type="io_setpin">
-                        <value name="pin">
-                            <shadow type="math_number">
-                                <field name="NUM">25</field>
-                            </shadow>
-                        </value>
-                    </block>`
-                },
-                {
-                    xml : 
-                    `<block type="io_digital_read">
-                        <value name="pin">
-                            <shadow type="math_number">
-                                <field name="NUM">32</field>
-                            </shadow>
-                        </value>
-                    </block>`
-                },
-                {
-                    xml : 
-                    `<block type="io_digital_write">
-                        <value name="pin">
-                            <shadow type="math_number">
-                                <field name="NUM">33</field>
-                            </shadow>
-                        </value>
-                        <value name="value">
-                            <shadow type="math_number">
-                                <field name="NUM">1</field>
-                            </shadow>
-                        </value>
-                    </block>`
-                },                
-                {
-                    xml : 
-                    `<block type="io_analog_read">
-                        <value name="pin">
-                            <shadow type="math_number">
-                                <field name="NUM">36</field>
-                            </shadow>
-                        </value>
-                    </block>`
-                },
-                {
-                    xml : 
-                    `<block type="io_pwm_write">
-                        <value name="pin">
-                            <shadow type="math_number">
-                                <field name="NUM">36</field>
-                            </shadow>
-                        </value>
-                        <value name="value">
-                            <shadow type="math_number">
-                                <field name="NUM">128</field>
-                            </shadow>
-                        </value>
-                    </block>`
-                },
-                {
-                    xml : 
-                    `<block type="io_pulse_in">
-                        <value name="pin">
-                            <shadow type="math_number">
-                                <field name="NUM">36</field>
-                            </shadow>
-                        </value>
-                    </block>`
-                },
-                'io_shift_in',
-                {
-                    xml : 
-                    `<block type="io_shift_out">
-                        <value name="data">
-                            <shadow type="math_number">
-                                <field name="NUM">127</field>
-                            </shadow>
-                        </value>
-                    </block>`
-                }
-            ]
-        },
+        // //GPIO
+        // {
+        //     name : 'GPIO',
+        //     index: 5,
+        //     color : '230',
+        //     icon : '/static/icons/icons8_electronics_96px.png',
+        //     blocks : [
+        //         {
+        //             xml : 
+        //             `<block type="io_setpin">
+        //                 <value name="pin">
+        //                     <shadow type="math_number">
+        //                         <field name="NUM">25</field>
+        //                     </shadow>
+        //                 </value>
+        //             </block>`
+        //         },
+        //         {
+        //             xml : 
+        //             `<block type="io_digital_read">
+        //                 <value name="pin">
+        //                     <shadow type="math_number">
+        //                         <field name="NUM">32</field>
+        //                     </shadow>
+        //                 </value>
+        //             </block>`
+        //         },
+        //         {
+        //             xml : 
+        //             `<block type="io_digital_write">
+        //                 <value name="pin">
+        //                     <shadow type="math_number">
+        //                         <field name="NUM">33</field>
+        //                     </shadow>
+        //                 </value>
+        //                 <value name="value">
+        //                     <shadow type="math_number">
+        //                         <field name="NUM">1</field>
+        //                     </shadow>
+        //                 </value>
+        //             </block>`
+        //         },                
+        //         {
+        //             xml : 
+        //             `<block type="io_analog_read">
+        //                 <value name="pin">
+        //                     <shadow type="math_number">
+        //                         <field name="NUM">36</field>
+        //                     </shadow>
+        //                 </value>
+        //             </block>`
+        //         },
+        //         {
+        //             xml : 
+        //             `<block type="io_pwm_write">
+        //                 <value name="pin">
+        //                     <shadow type="math_number">
+        //                         <field name="NUM">36</field>
+        //                     </shadow>
+        //                 </value>
+        //                 <value name="value">
+        //                     <shadow type="math_number">
+        //                         <field name="NUM">128</field>
+        //                     </shadow>
+        //                 </value>
+        //             </block>`
+        //         },
+        //         {
+        //             xml : 
+        //             `<block type="io_pulse_in">
+        //                 <value name="pin">
+        //                     <shadow type="math_number">
+        //                         <field name="NUM">36</field>
+        //                     </shadow>
+        //                 </value>
+        //             </block>`
+        //         },
+        //         'io_shift_in',
+        //         {
+        //             xml : 
+        //             `<block type="io_shift_out">
+        //                 <value name="data">
+        //                     <shadow type="math_number">
+        //                         <field name="NUM">127</field>
+        //                     </shadow>
+        //                 </value>
+        //             </block>`
+        //         }
+        //     ]
+        // },
         //Music  
         {
             name: "Music",
