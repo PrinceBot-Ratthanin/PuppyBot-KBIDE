@@ -8,5 +8,5 @@ module.exports = {
   email: "print081@gmail.com",
   git: "https://github.com/PrinceBot-Ratthanin/kbpro-puppybot-board",
   image: "/static/cover.jpg",
-  version: "2.0.0",
+  version: "2.1.0",
 };
