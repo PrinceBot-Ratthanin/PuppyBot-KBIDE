@@ -10,7 +10,12 @@
 #include "PuppyBotTurnPID.h"
 
 
+typedef int Number;
+typedef int Boolean;
 
+${EXTINC}
+${VARIABLE}
+${FUNCTION}
 
 void setup() {
   
