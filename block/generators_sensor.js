@@ -152,5 +152,45 @@ Blockly.JavaScript['IMU_moveStraightDirection'] = function(block) {
   return code;
 };
 
+Blockly.JavaScript['IMU_moveStraightPID_Encoder'] = function(block) {
+  var dropdown_dir = block.getFieldValue('dir');
+  var value_s0 = Blockly.JavaScript.valueToCode(block, 'S0', Blockly.JavaScript.ORDER_ATOMIC) || '0';
+  var value_s1 = Blockly.JavaScript.valueToCode(block, 'S1', Blockly.JavaScript.ORDER_ATOMIC) || '0';
+  var value_s2 = Blockly.JavaScript.valueToCode(block, 'S2', Blockly.JavaScript.ORDER_ATOMIC) || '0';
+  var value_s3 = Blockly.JavaScript.valueToCode(block, 'S3', Blockly.JavaScript.ORDER_ATOMIC) || '0';
+  var value_s4 = Blockly.JavaScript.valueToCode(block, 'S4', Blockly.JavaScript.ORDER_ATOMIC) || '0';
+  var value_s5 = Blockly.JavaScript.valueToCode(block, 'S5', Blockly.JavaScript.ORDER_ATOMIC) || '0';
+  var code = '';
+  //code += 'PID_NumPin = ' + value_numSensor+';\t';
+  code += 'moveStraightPID_Encoder('+dropdown_dir+','+value_s0+','+value_s1+','+value_s2+','+value_s3+','+value_s4+','+value_s5+');\n';
+  return code;
+};
+
+Blockly.JavaScript['IMU_moveStraightDirection_Encoder'] = function(block) {
+  var dropdown_direction = block.getFieldValue('dir');
+  var dropdown_angle = block.getFieldValue('angle');
+  
+  var value_s1 = Blockly.JavaScript.valueToCode(block, 'S1', Blockly.JavaScript.ORDER_ATOMIC) || '0';
+  var value_s2 = Blockly.JavaScript.valueToCode(block, 'S2', Blockly.JavaScript.ORDER_ATOMIC) || '0';
+  var value_s3 = Blockly.JavaScript.valueToCode(block, 'S3', Blockly.JavaScript.ORDER_ATOMIC) || '0';
+  var value_s4 = Blockly.JavaScript.valueToCode(block, 'S4', Blockly.JavaScript.ORDER_ATOMIC) || '0';
+  var value_s5 = Blockly.JavaScript.valueToCode(block, 'S5', Blockly.JavaScript.ORDER_ATOMIC) || '0';
+
+  var code = ``;
+  code += 'MoveStraightDirection_Encoder('+dropdown_direction+','+dropdown_angle+','+value_s1+','+value_s2+','+value_s3+','+value_s4+','+value_s5+');\n';
+  return code;
+};
+
+Blockly.JavaScript['reset_Encoder'] = function(block) {  
+  var code = '#SETUP init_encoder();\n#END\n resetEncoder();\n';
+  return code;
+};
+Blockly.JavaScript['read_Encoder'] = function(block) {
+ 
+
+  var code = `#SETUP init_encoder();\n#END\n get_pulse_Encoder()`;
+  return [code, Blockly.JavaScript.ORDER_ATOMIC];
+};
+
 
 }
