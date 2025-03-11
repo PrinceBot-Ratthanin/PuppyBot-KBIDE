@@ -316,4 +316,93 @@ Blockly.Blocks['IMU_moveStraightDirection'] = {
 };
 
 
+
+
+Blockly.Blocks['IMU_moveStraightPID_Encoder'] = {
+  init: function() {
+    
+    this.appendDummyInput()
+          .appendField("Move Encoder ")
+          .appendField(new Blockly.FieldDropdown([["⬆ Forward","0"],["⬇ Backward","1"]]), "dir");
+    this.appendValueInput("S0")
+      .setCheck("Number")
+      .appendField("Straight At Angle=");
+    this.appendValueInput("S1")
+      .setCheck("Number")
+      .appendField("speed=");
+    this.appendValueInput("S2")
+      .setCheck("Number")
+      .appendField("Pulse=");
+    this.appendValueInput("S3")
+      .setCheck("Number")
+      .appendField("KP=");
+    this.appendValueInput("S4")
+      .setCheck("Number")
+      .appendField("KI=");
+    this.appendValueInput("S5")
+      .setCheck("Number")
+      .appendField("KD=");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(67);
+    this.setTooltip("");
+  }
+};
+Blockly.Blocks['IMU_moveStraightDirection_Encoder'] = {
+  init: function() {
+    
+    this.appendDummyInput()
+          .appendField("Move Encoder ")
+          .appendField(new Blockly.FieldDropdown([["⬆ Forward","0"],["⬇ Backward","1"]]), "dir");
+    this.appendDummyInput()
+          .appendField("At ")
+          .appendField(new Blockly.FieldDropdown([["⬆ North","0"],["➡ East","1"], ["⬇ South","2"], ["⬅ West","3"]]), "angle");
+    this.appendValueInput("S1")
+      .setCheck("Number")
+      .appendField("speed=");
+    this.appendValueInput("S2")
+      .setCheck("Number")
+      .appendField("Pulse=");
+    this.appendValueInput("S3")
+      .setCheck("Number")
+      .appendField("KP=");
+    this.appendValueInput("S4")
+      .setCheck("Number")
+      .appendField("KI=");
+    this.appendValueInput("S5")
+      .setCheck("Number")
+      .appendField("KD=");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(67);
+    this.setTooltip("");
+  }
+};
+
+Blockly.Blocks['reset_Encoder'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("reset_Encoder to 0");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(65);
+    this.setTooltip("");
+  }
+};
+Blockly.Blocks['read_Encoder'] = {
+    init: function() {
+      this.appendDummyInput()
+          .appendField("read_Encoder Pin D2 and D3");
+      this.setInputsInline(true);
+      this.setOutput(true, "Number");
+      this.setColour(65);
+   this.setTooltip("read_Encoder");
+   this.setHelpUrl("");
+    }
+  };
+
+
 }
