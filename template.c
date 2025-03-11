@@ -1,11 +1,15 @@
 #include <Arduino.h>
 #include <KB_music.h>
+#include <puppybot.h>
+
+
+
 
 #ifndef I2C_ADDR
 #define I2C_ADDR 0x69
 #endif
 
-#include <puppybot.h>
+
 #include "PuppyBotIMU.h"
 #include "PuppyBotTurnPID.h"
 
@@ -24,6 +28,7 @@ void setup() {
   Serial.print("Runing.....");
   ${SETUP_CODE}
   ${BLOCKSETUP}
+  // encoder.begin();
 }
 
 void loop() {
