@@ -70,12 +70,30 @@ int _Sensitive_B = 80;
 int current_degree_servo  = 90;
 
 
-void buzzer(int freq, int timr_delay) {
+void softTone(int frequency, int duration) {
+  long period = 1000000L / frequency; // คาบเวลา (microseconds)
+  long cycles = (long)frequency * duration / 1000; // จำนวนรอบที่ต้องทำ
+  
   pinMode(7, OUTPUT);
-  tone(7, freq);
-  delay(timr_delay);
-  tone(7, 0);
+  
+  for (long i = 0; i < cycles; i++) {
+    digitalWrite(7, HIGH);
+    delayMicroseconds(period / 2);  // ครึ่งคาบ (HIGH)
+    digitalWrite(7, LOW);
+    delayMicroseconds(period / 2);  // ครึ่งคาบ (LOW)
+  }
 }
+
+
+void buzzer(int freq, int timr_delay) {
+  // pinMode(7, OUTPUT);
+  softTone(freq,timr_delay );
+  // delay(timr_delay);
+  // tone(7, 0);
+  // noTone(7);
+}
+
+
 void puppybot_setup() {
   analogWriteResolution(10);
   analogWriteRange(1023);
@@ -87,9 +105,17 @@ void puppybot_setup() {
    if (tcs.begin()) {
     Serial.println("Found sensor");
   }
-  buzzer(500,100);
+   buzzer(500,100);
 
 }
+// void puppybot_setup() {
+//   analogWriteResolution(10);
+//   analogWriteRange(1023);
+//   tft_.initR(INITR_BLACKTAB);
+//   tft_.setRotation(1);
+//   tft_.fillScreen(ST77XX_BLACK);
+
+// }
 int ADC(int analog_CH) {
   int val = 0;
   if (analog_CH < 8 ) {
