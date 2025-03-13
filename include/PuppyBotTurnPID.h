@@ -142,7 +142,7 @@ float normalizeAngle(float angle) {
     return angle;
 }
 
-void moveStraightPID(int Movedirection, float targetYaw_straight, int speedBase, float duration, float kp_straight, float ki_straight, float kd_straight) {
+void moveStraightPID(int Movedirection, float targetYaw_straight, int speedBase, float duration, float kp_straight, float ki_straight, float kd_straight,int Slow) {
     unsigned long startTime = millis();
     unsigned long startTime_reduc = millis();
     unsigned long endTime = startTime + duration; 
@@ -165,30 +165,30 @@ void moveStraightPID(int Movedirection, float targetYaw_straight, int speedBase,
         float output = kp_straight * error_straight + ki_straight * integral_straight + kd_straight * derivative;
 
         preverror_straight = error_straight;
+        int rightSpeed;
+        int leftSpeed;
 
-        unsigned long elapsedTime = now - startTime_reduc;
-
-        // คำนวณ error ด้านเวลา (คล้าย encoderError)
-        long timeError = endTime - now;
-
-        // เริ่มชะลอความเร็วในช่วง 1 วินาทีสุดท้าย
-        float speedReduction;
-        if (timeError <= 500 && timeError > 0) {
-          speedReduction = timeError * 0.01;
-          speedReduction = constrain(speedReduction, 0, speedBase);
-        } else if (timeError <= 0) {
-          speedReduction = 0;  // หยุดเมื่อครบเวลา
-        } else {
-          speedReduction = speedBase; // ก่อนถึงช่วงชะลอ ให้เต็มที่
+        if(Slow == 1){
+          unsigned long elapsedTime = now - startTime_reduc;
+          long timeError = endTime - now;
+          float speedReduction;
+          if (timeError <= 500 && timeError > 0) {
+            speedReduction = timeError * 0.01;
+            speedReduction = constrain(speedReduction, 0, speedBase);
+          } else if (timeError <= 0) {
+            speedReduction = 0;  // หยุดเมื่อครบเวลา
+          } else {
+            speedReduction = speedBase; // ก่อนถึงช่วงชะลอ ให้เต็มที่
+          }
+          rightSpeed = constrain(speedReduction - output, 10, 100);
+          leftSpeed = constrain(speedReduction + output, 10, 100);
+        }
+        else{
+          rightSpeed = constrain(speedBase - output, 20, 100);
+          leftSpeed = constrain(speedBase + output, 20, 100);
         }
 
-        int rightSpeed = constrain(speedReduction - output, 10, 100);
-        int leftSpeed = constrain(speedReduction + output, 10, 100);
-
-
-        // int rightSpeed = constrain(speedBase - output, 20, 100);
-        // int leftSpeed = constrain(speedBase + output, 20, 100);
-
+    
         if (Movedirection == 0) {  // เดินหน้า
             motor(1, leftSpeed);
             motor(2, rightSpeed);
@@ -215,7 +215,7 @@ void moveStraightPID(int Movedirection, float targetYaw_straight, int speedBase,
 }
 
 
-void MoveStraightDirection(int Movedirection, int targetYaw_straight, int speedBase, float duration, float kp_straight, float ki_straight, float kd_straight) {
+void MoveStraightDirection(int Movedirection, int targetYaw_straight, int speedBase, float duration, float kp_straight, float ki_straight, float kd_straight,int Slow) {
     float targetYaw_MovePID = 0;
     float currentYaw = getOffsetYaw(); // อ่านค่าปัจจุบัน
 
@@ -245,7 +245,7 @@ void MoveStraightDirection(int Movedirection, int targetYaw_straight, int speedB
     Serial.print("Move Direction: "); Serial.print(Movedirection);
     Serial.print(" Target Yaw MovePID: "); Serial.println(targetYaw_MovePID);
 
-    moveStraightPID(Movedirection, targetYaw_MovePID, speedBase, duration, kp_straight, ki_straight, kd_straight);
+    moveStraightPID(Movedirection, targetYaw_MovePID, speedBase, duration, kp_straight, ki_straight, kd_straight,Slow);
 }
 
 
@@ -281,7 +281,7 @@ void MoveDirection_West() {
 
 
 
-void moveStraightPID_Encoder(int Movedirection, float targetYaw_straight, int speedBase, int target_encoder, float kp_straight, float ki_straight, float kd_straight) {
+void moveStraightPID_Encoder(int Movedirection, float targetYaw_straight, int speedBase, int target_encoder, float kp_straight, float ki_straight, float kd_straight,int Slow) {
     long initialEncoderCount = get_pulse_Encoder();
     unsigned long startTime = millis();
     float integral_straight = 0, preverror_straight = 0;
@@ -302,14 +302,26 @@ void moveStraightPID_Encoder(int Movedirection, float targetYaw_straight, int sp
 
         preverror_straight = error_straight;
 
-        float kp_encoder = 0.05;  
-        long encoderMoved = abs(get_pulse_Encoder() - initialEncoderCount);
-        long encoderError = target_encoder - encoderMoved;
-        float speedReduction = encoderError * kp_encoder;
-        speedReduction = constrain(speedReduction, 10, speedBase);
+        int rightSpeed;
+        int leftSpeed;
 
-        int rightSpeed = constrain(speedReduction - output, 0, 100);
-        int leftSpeed = constrain(speedReduction + output, 0, 100);
+        if(Slow == 1){
+          float kp_encoder = 0.05;  
+          long encoderMoved = abs(get_pulse_Encoder() - initialEncoderCount);
+          long encoderError = target_encoder - encoderMoved;
+          float speedReduction = encoderError * kp_encoder;
+          speedReduction = constrain(speedReduction, 10, speedBase);
+
+          rightSpeed = constrain(speedReduction - output, 0, 100);
+          leftSpeed = constrain(speedReduction + output, 0, 100);
+        }
+        else{
+          rightSpeed = constrain(speedBase - output, 0, 100);
+          leftSpeed = constrain(speedBase + output, 0, 100);
+
+        }
+
+        
 
         if (Movedirection == 0) {  // เดินหน้า
             motor(1, leftSpeed);
@@ -336,7 +348,7 @@ void moveStraightPID_Encoder(int Movedirection, float targetYaw_straight, int sp
     ao(); delay(10);
     ao();
 }
-void MoveStraightDirection_Encoder(int Movedirection, int targetYaw_straight, int speedBase, float duration, float kp_straight, float ki_straight, float kd_straight) {
+void MoveStraightDirection_Encoder(int Movedirection, int targetYaw_straight, int speedBase, float duration, float kp_straight, float ki_straight, float kd_straight,int Slow) {
     float targetYaw_MovePID = 0;
     float currentYaw = getOffsetYaw(); // อ่านค่าปัจจุบัน
 
@@ -358,5 +370,5 @@ void MoveStraightDirection_Encoder(int Movedirection, int targetYaw_straight, in
             break;
     }
     targetYaw_MovePID = normalizeAngle(targetYaw_MovePID);
-    moveStraightPID_Encoder(Movedirection, targetYaw_MovePID, speedBase, duration, kp_straight, ki_straight, kd_straight);
+    moveStraightPID_Encoder(Movedirection, targetYaw_MovePID, speedBase, duration, kp_straight, ki_straight, kd_straight,Slow);
 }
