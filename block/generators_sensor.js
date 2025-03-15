@@ -98,11 +98,9 @@ Blockly.JavaScript['IMU_moveStraightPID'] = function(block) {
   var value_s3 = Blockly.JavaScript.valueToCode(block, 'S3', Blockly.JavaScript.ORDER_ATOMIC) || '0';
   var value_s4 = Blockly.JavaScript.valueToCode(block, 'S4', Blockly.JavaScript.ORDER_ATOMIC) || '0';
   var value_s5 = Blockly.JavaScript.valueToCode(block, 'S5', Blockly.JavaScript.ORDER_ATOMIC) || '0';
-  var checkbox_Slow = (block.getFieldValue('Slow') == 'TRUE')? '1' : '0';
-
   var code = '';
   //code += 'PID_NumPin = ' + value_numSensor+';\t';
-  code += 'moveStraightPID('+dropdown_dir+','+value_s0+','+value_s1+','+value_s2+','+value_s3+','+value_s4+','+value_s5+','+checkbox_Slow+');\n';
+  code += 'moveStraightPID('+dropdown_dir+','+value_s0+','+value_s1+','+value_s2+','+value_s3+','+value_s4+','+value_s5+');\n';
   return code;
 };
 Blockly.JavaScript['IMU_set_dataFor_turnDirection'] = function(block) {
@@ -148,11 +146,9 @@ Blockly.JavaScript['IMU_moveStraightDirection'] = function(block) {
   var value_s3 = Blockly.JavaScript.valueToCode(block, 'S3', Blockly.JavaScript.ORDER_ATOMIC) || '0';
   var value_s4 = Blockly.JavaScript.valueToCode(block, 'S4', Blockly.JavaScript.ORDER_ATOMIC) || '0';
   var value_s5 = Blockly.JavaScript.valueToCode(block, 'S5', Blockly.JavaScript.ORDER_ATOMIC) || '0';
-  var checkbox_Slow = (block.getFieldValue('Slow') == 'TRUE')? '1' : '0';
-
 
   var code = ``;
-  code += 'MoveStraightDirection('+dropdown_direction+','+dropdown_angle+','+value_s1+','+value_s2+','+value_s3+','+value_s4+','+value_s5+','+checkbox_Slow+');\n';
+  code += 'MoveStraightDirection('+dropdown_direction+','+dropdown_angle+','+value_s1+','+value_s2+','+value_s3+','+value_s4+','+value_s5+');\n';
   return code;
 };
 
@@ -164,11 +160,9 @@ Blockly.JavaScript['IMU_moveStraightPID_Encoder'] = function(block) {
   var value_s3 = Blockly.JavaScript.valueToCode(block, 'S3', Blockly.JavaScript.ORDER_ATOMIC) || '0';
   var value_s4 = Blockly.JavaScript.valueToCode(block, 'S4', Blockly.JavaScript.ORDER_ATOMIC) || '0';
   var value_s5 = Blockly.JavaScript.valueToCode(block, 'S5', Blockly.JavaScript.ORDER_ATOMIC) || '0';
-  var checkbox_Slow = (block.getFieldValue('Slow') == 'TRUE')? '1' : '0';
-
   var code = '';
   //code += 'PID_NumPin = ' + value_numSensor+';\t';
-  code += 'moveStraightPID_Encoder('+dropdown_dir+','+value_s0+','+value_s1+','+value_s2+','+value_s3+','+value_s4+','+value_s5+','+checkbox_Slow+');\n';
+  code += 'moveStraightPID_Encoder('+dropdown_dir+','+value_s0+','+value_s1+','+value_s2+','+value_s3+','+value_s4+','+value_s5+');\n';
   return code;
 };
 
@@ -181,10 +175,9 @@ Blockly.JavaScript['IMU_moveStraightDirection_Encoder'] = function(block) {
   var value_s3 = Blockly.JavaScript.valueToCode(block, 'S3', Blockly.JavaScript.ORDER_ATOMIC) || '0';
   var value_s4 = Blockly.JavaScript.valueToCode(block, 'S4', Blockly.JavaScript.ORDER_ATOMIC) || '0';
   var value_s5 = Blockly.JavaScript.valueToCode(block, 'S5', Blockly.JavaScript.ORDER_ATOMIC) || '0';
-  var checkbox_Slow = (block.getFieldValue('Slow') == 'TRUE')? '1' : '0';
 
   var code = ``;
-  code += 'MoveStraightDirection_Encoder('+dropdown_direction+','+dropdown_angle+','+value_s1+','+value_s2+','+value_s3+','+value_s4+','+value_s5+','+checkbox_Slow+');\n';
+  code += 'MoveStraightDirection_Encoder('+dropdown_direction+','+dropdown_angle+','+value_s1+','+value_s2+','+value_s3+','+value_s4+','+value_s5+');\n';
   return code;
 };
 
