@@ -252,6 +252,9 @@ Blockly.Blocks['IMU_moveStraightPID'] = {
     this.appendValueInput("S5")
       .setCheck("Number")
       .appendField("KD=");
+    this.appendDummyInput()
+        .appendField("Slow before Stop")
+        .appendField(new Blockly.FieldCheckbox("TRUE"), "Slow");
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -275,6 +278,7 @@ Blockly.Blocks['IMU_set_dataFor_turnDirection'] = {
     this.appendValueInput("S3")
       .setCheck("Number")
       .appendField("KD=");
+    
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -307,6 +311,9 @@ Blockly.Blocks['IMU_moveStraightDirection'] = {
     this.appendValueInput("S5")
       .setCheck("Number")
       .appendField("KD=");
+    this.appendDummyInput()
+        .appendField("Slow before Stop")
+        .appendField(new Blockly.FieldCheckbox("TRUE"), "Slow");
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -342,6 +349,9 @@ Blockly.Blocks['IMU_moveStraightPID_Encoder'] = {
     this.appendValueInput("S5")
       .setCheck("Number")
       .appendField("KD=");
+    this.appendDummyInput()
+        .appendField("Slow before Stop")
+        .appendField(new Blockly.FieldCheckbox("TRUE"), "Slow");
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -373,6 +383,9 @@ Blockly.Blocks['IMU_moveStraightDirection_Encoder'] = {
     this.appendValueInput("S5")
       .setCheck("Number")
       .appendField("KD=");
+    this.appendDummyInput()
+        .appendField("Slow before Stop")
+        .appendField(new Blockly.FieldCheckbox("TRUE"), "Slow");
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
