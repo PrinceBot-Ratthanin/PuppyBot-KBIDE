@@ -53,9 +53,6 @@ module.exports = {
                     xml: `<sep gap="25"></sep><label text="ใช้งาน IMU รุ่นใหม่ " web-class="main-content"></label>`
                 },
                 'IMU_begin',
-                'IMU_getData',
-                'IMU_getData_Yaw',
-                'IMU_TurnByAngle',
                 {xml:
                       `<block type="IMU_set_dataFor_turnDirection">
                             <value name="S0">
@@ -78,8 +75,16 @@ module.exports = {
                                     <field name="NUM">5</field>
                                 </shadow>
                             </value>
+                            <value name="S4">
+                                <shadow type="math_number">
+                                    <field name="NUM">1</field>
+                                </shadow>
+                            </value>
                         </block>`
               },
+                'IMU_getData',
+                'IMU_getData_Yaw',
+                'IMU_TurnByAngle',
                 'IMU_TurnByDirection',
                 {xml:
                       `<block type="IMU_TurnPID">
@@ -248,6 +253,7 @@ module.exports = {
             color: "230",
             icon: "/static/icons/icons8_picture_96px_1.png",
             blocks: [
+                //"i2c128x64_create_image",
                 "tft_display_setRotation",
                 "tft_display_fillScreen",
                 {

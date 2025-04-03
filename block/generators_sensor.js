@@ -110,9 +110,10 @@ Blockly.JavaScript['IMU_set_dataFor_turnDirection'] = function(block) {
   var value_s1 = Blockly.JavaScript.valueToCode(block, 'S1', Blockly.JavaScript.ORDER_ATOMIC) || '0';
   var value_s2 = Blockly.JavaScript.valueToCode(block, 'S2', Blockly.JavaScript.ORDER_ATOMIC) || '0';
   var value_s3 = Blockly.JavaScript.valueToCode(block, 'S3', Blockly.JavaScript.ORDER_ATOMIC) || '0';
+  var value_s4 = Blockly.JavaScript.valueToCode(block, 'S4', Blockly.JavaScript.ORDER_ATOMIC) || '0';
   var code = '';
   //code += 'PID_NumPin = ' + value_numSensor+';\t';
-  code += 'set_data_for_turnDirection('+value_s0+','+value_s1+','+value_s2+','+value_s3+');\n';
+  code += 'set_data_for_turnDirection('+value_s4+','+value_s0+','+value_s1+','+value_s2+','+value_s3+');\n';
   return code;
 };
 
@@ -120,10 +121,15 @@ Blockly.JavaScript['IMU_TurnByDirection'] = function(block) {
   var dropdown_direction = block.getFieldValue('direction');
 
   var code = ``;
-  if(dropdown_direction == '0'){code += `turnNorth();`}
-  if(dropdown_direction == '1'){code += `turnEast();`}
-  if(dropdown_direction == '2'){code += `turnSouth();`}
-  if(dropdown_direction == '3'){code += `turnWest();`}
+  if(dropdown_direction == '0'){code += `turn_180();`}
+  if(dropdown_direction == '1'){code += `turn_270();`}
+  if(dropdown_direction == '2'){code += `turn_360();`}
+  if(dropdown_direction == '3'){code += `turn_90();`}
+  if(dropdown_direction == '4'){code += `turn_45();`}
+  if(dropdown_direction == '5'){code += `turn_135();`}
+  if(dropdown_direction == '6'){code += `turn_225();`}
+  if(dropdown_direction == '7'){code += `turn_315();`}
+
   return code;
 };
 
@@ -135,6 +141,8 @@ Blockly.JavaScript['IMU_TurnByAngle'] = function(block) {
   if(dropdown_angle == '1'){code += `turnByAngle(-90);`}
   if(dropdown_angle == '2'){code += `turnByAngle(180);`}
   if(dropdown_angle == '3'){code += `turnByAngle(-180);`}
+  if(dropdown_angle == '4'){code += `turnByAngle(45);`}
+  if(dropdown_angle == '5'){code += `turnByAngle(-45);`}
   return code;
 };
 
