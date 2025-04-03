@@ -9,15 +9,22 @@ float previousYaw_turnPID = 0;
 
 float preverror_turnPID = 0;
 float integral_turn = 0;
-float turnDirection_PID_KP=0,turnDirection_PID_KD=0;
+float turnDirection_PID_KP=2,turnDirection_PID_KD=0;
 int speedMin_turnDirection = 15,speedMax_turnDirection = 60;
+int error_for_turnPID = 1;
 
 
-void set_data_for_turnDirection(int speedMin,int speedMax,float KP,float KD){
+void set_data_for_turnDirection(int error_PID,int speedMin,int speedMax,float KP,float KD){
   turnDirection_PID_KP = KP;
   turnDirection_PID_KD = KD;
   speedMin_turnDirection = speedMin;
   speedMax_turnDirection = speedMax;
+  error_for_turnPID = error_PID;
+}
+
+float shortestAngle(float currentAngle, float targetAngle) {
+    float error = fmod((targetAngle - currentAngle + 540), 360) - 180;
+    return error;
 }
 
 void turnPID(float targetYaw_turnPID,int speedTurn_min,int speedTurn_max,float kp_turnPID,float kd_turnPID) {
@@ -26,7 +33,8 @@ void turnPID(float targetYaw_turnPID,int speedTurn_min,int speedTurn_max,float k
   int stableCount = 0;
   int overshootCount = 0;
   bool hasOvershoot = false;
-  float preverror_turnPID = targetYaw_turnPID - getContinuousYaw();
+  //float preverror_turnPID = targetYaw_turnPID - getContinuousYaw();
+  float preverror_turnPID = shortestAngle(getContinuousYaw(), targetYaw_turnPID);
 
   while (true) {
     updateContinuousYaw();
@@ -67,10 +75,14 @@ void turnPID(float targetYaw_turnPID,int speedTurn_min,int speedTurn_max,float k
         motor(4, -speed);
       }
 
-    
-    if (abs(error_turnPID) < 1 && hasOvershoot && overshootCount >= 2) {
+    if(overshootCount > 10){
+      ao();
+      delay(10);
+      ao();
+    }
+    if (abs(error_turnPID) < error_for_turnPID && hasOvershoot && overshootCount >= 2) {
       stableCount++;
-      if (stableCount > 10) {
+      if (stableCount > 5) {
         ao();
         break;
       }
@@ -86,54 +98,119 @@ void turnPID(float targetYaw_turnPID,int speedTurn_min,int speedTurn_max,float k
   }
 }
 
-void turnNorth() {
-  float targetYaw_turnPID = getOffsetYaw();
-  turnPID(targetYaw_turnPID,speedMin_turnDirection,speedMax_turnDirection,turnDirection_PID_KP,turnDirection_PID_KD);
-}
+// void turnNorth() {
+//   float targetYaw_turnPID = getOffsetYaw();
+//   turnPID(targetYaw_turnPID,speedMin_turnDirection,speedMax_turnDirection,turnDirection_PID_KP,turnDirection_PID_KD);
+// }
 
-void turnEast() {
-  float targetYaw_turnPID = getOffsetYaw() + 90;
-  //updateContinuousYaw();
-  if (getContinuousYaw() < 100) {
-    targetYaw_turnPID = targetYaw_turnPID - 360;
-  }
+// void turnEast() {
+//   float targetYaw_turnPID = getOffsetYaw() + 90;
+//   //updateContinuousYaw();
+//   if (getContinuousYaw() < 100) {
+//     targetYaw_turnPID = targetYaw_turnPID - 360;
+//   }
+//   turnPID(targetYaw_turnPID,speedMin_turnDirection,speedMax_turnDirection,turnDirection_PID_KP,turnDirection_PID_KD);
+//   resetContinuousYaw();
+// }
+
+// void turnSouth() {
+//   float targetYaw_turnPID = getOffsetYaw() + 180;
+//   if (getContinuousYaw() < 100) {
+//     targetYaw_turnPID = targetYaw_turnPID - 360;
+//   }
+//   turnPID(targetYaw_turnPID,speedMin_turnDirection,speedMax_turnDirection,turnDirection_PID_KP,turnDirection_PID_KD);
+//   resetContinuousYaw();
+// }
+
+// void turnWest() {
+//   float targetYaw_turnPID = getOffsetYaw() - 90;
+//   if (getContinuousYaw() >= 300) {
+//     targetYaw_turnPID = targetYaw_turnPID + 360;
+//   }
+//   turnPID(targetYaw_turnPID,speedMin_turnDirection,speedMax_turnDirection,turnDirection_PID_KP,turnDirection_PID_KD);
+//   resetContinuousYaw();
+// }
+// void turnByAngle(int turnAngle) {
+//   int step = turnAngle / 90;  
+
+//   int oldDirection_turnPID = Direction_turnPIDIndex;
+//   Direction_turnPIDIndex += step;
+//   if (Direction_turnPIDIndex >= 4) Direction_turnPIDIndex = 0;
+//   if (Direction_turnPIDIndex < 0) Direction_turnPIDIndex = 3;
+//   if (Direction_turnPIDIndex == NORTH) {
+//     turnNorth();
+//   } else if (Direction_turnPIDIndex == EAST) {
+//     turnEast();
+//   } else if (Direction_turnPIDIndex == SOUTH) {
+//     turnSouth();
+//   } else if (Direction_turnPIDIndex == WEST) {
+//     turnWest();
+//   }
+// }
+
+
+void turn_45() {
+  float targetYaw_turnPID = getOffsetYaw() - 135;
+  targetYaw_turnPID = fmod(targetYaw_turnPID, 360);  //รักษาให้อยู่ใน 0-359°
+  turnPID(targetYaw_turnPID,speedMin_turnDirection,speedMax_turnDirection,turnDirection_PID_KP,turnDirection_PID_KD);
+  resetContinuousYaw();
+}
+void turn_90() {
+  float targetYaw_turnPID = getOffsetYaw() -90 ;
+  targetYaw_turnPID = fmod(targetYaw_turnPID, 360);  //รักษาให้อยู่ใน 0-359°
+  turnPID(targetYaw_turnPID,speedMin_turnDirection,speedMax_turnDirection,turnDirection_PID_KP,turnDirection_PID_KD);
+  resetContinuousYaw();
+}
+void turn_135() {
+  float targetYaw_turnPID = getOffsetYaw() -45 ;
+  targetYaw_turnPID = fmod(targetYaw_turnPID, 360);  //รักษาให้อยู่ใน 0-359°
+  turnPID(targetYaw_turnPID,speedMin_turnDirection,speedMax_turnDirection,turnDirection_PID_KP,turnDirection_PID_KD);
+  resetContinuousYaw();
+}
+void turn_180() {
+  float targetYaw_turnPID = getOffsetYaw() ;
+  targetYaw_turnPID = fmod(targetYaw_turnPID, 360);  //รักษาให้อยู่ใน 0-359°
+  turnPID(targetYaw_turnPID,speedMin_turnDirection,speedMax_turnDirection,turnDirection_PID_KP,turnDirection_PID_KD);
+  resetContinuousYaw();
+}
+void turn_225() {
+  float targetYaw_turnPID = getOffsetYaw() + 45 ;
+  targetYaw_turnPID = fmod(targetYaw_turnPID, 360);  //รักษาให้อยู่ใน 0-359°
+  turnPID(targetYaw_turnPID,speedMin_turnDirection,speedMax_turnDirection,turnDirection_PID_KP,turnDirection_PID_KD);
+  resetContinuousYaw();
+}
+void turn_270() {
+  float targetYaw_turnPID = getOffsetYaw() + 90 ;
+  targetYaw_turnPID = fmod(targetYaw_turnPID, 360);  //รักษาให้อยู่ใน 0-359°
+  turnPID(targetYaw_turnPID,speedMin_turnDirection,speedMax_turnDirection,turnDirection_PID_KP,turnDirection_PID_KD);
+  resetContinuousYaw();
+}
+void turn_315() {
+  float targetYaw_turnPID = getOffsetYaw() +135 ;
+  targetYaw_turnPID = fmod(targetYaw_turnPID, 360);  //รักษาให้อยู่ใน 0-359°
+  turnPID(targetYaw_turnPID,speedMin_turnDirection,speedMax_turnDirection,turnDirection_PID_KP,turnDirection_PID_KD);
+  resetContinuousYaw();
+}
+void turn_360() {
+  float targetYaw_turnPID = getOffsetYaw() +180 ;
+  targetYaw_turnPID = fmod(targetYaw_turnPID, 360);  //รักษาให้อยู่ใน 0-359°
   turnPID(targetYaw_turnPID,speedMin_turnDirection,speedMax_turnDirection,turnDirection_PID_KP,turnDirection_PID_KD);
   resetContinuousYaw();
 }
 
-void turnSouth() {
-  float targetYaw_turnPID = getOffsetYaw() + 180;
-  if (getContinuousYaw() < 100) {
-    targetYaw_turnPID = targetYaw_turnPID - 360;
-  }
-  turnPID(targetYaw_turnPID,speedMin_turnDirection,speedMax_turnDirection,turnDirection_PID_KP,turnDirection_PID_KD);
-  resetContinuousYaw();
-}
 
-void turnWest() {
-  float targetYaw_turnPID = getOffsetYaw() - 90;
-  if (getContinuousYaw() >= 300) {
-    targetYaw_turnPID = targetYaw_turnPID + 360;
-  }
-  turnPID(targetYaw_turnPID,speedMin_turnDirection,speedMax_turnDirection,turnDirection_PID_KP,turnDirection_PID_KD);
-  resetContinuousYaw();
-}
 void turnByAngle(int turnAngle) {
-  int step = turnAngle / 90;  
+  
+  updateContinuousYaw();
+  float currentYaw = getContinuousYaw();  // จดจำตำแหน่งปัจจุบันก่อนหมุน
+  float targetYaw = currentYaw + turnAngle;  // กำหนดมุมเป้าหมายจากมุมปัจจุบัน
 
-  int oldDirection_turnPID = Direction_turnPIDIndex;
-  Direction_turnPIDIndex += step;
-  if (Direction_turnPIDIndex >= 4) Direction_turnPIDIndex = 0;
-  if (Direction_turnPIDIndex < 0) Direction_turnPIDIndex = 3;
-  if (Direction_turnPIDIndex == NORTH) {
-    turnNorth();
-  } else if (Direction_turnPIDIndex == EAST) {
-    turnEast();
-  } else if (Direction_turnPIDIndex == SOUTH) {
-    turnSouth();
-  } else if (Direction_turnPIDIndex == WEST) {
-    turnWest();
-  }
+  targetYaw = fmod(targetYaw, 360); // ให้อยู่ในช่วง 0-359°
+
+  // เรียกฟังก์ชั่น PID เพื่อทำการหมุนตามมุมที่กำหนด
+  turnPID(targetYaw, speedMin_turnDirection, speedMax_turnDirection, turnDirection_PID_KP, turnDirection_PID_KD);
+
+  resetContinuousYaw(); // หรือจะไม่ reset ก็ได้ ขึ้นกับลักษณะการใช้งานของคุณ
 }
 
 float normalizeAngle(float angle) {
@@ -202,12 +279,12 @@ void moveStraightPID(int Movedirection, float targetYaw_straight, int speedBase,
         }
 
         // 🔍 Debug แสดงค่ามุมและค่า PID
-        Serial.print("Current Yaw: "); Serial.print(current_Yaw);
-        Serial.print(" Target Yaw: "); Serial.print(targetYaw_straight);
-        Serial.print(" Error: "); Serial.print(error_straight);
-        Serial.print(" PID Output: "); Serial.print(output);
-        Serial.print(" Left Speed: "); Serial.print(leftSpeed);
-        Serial.print(" Right Speed: "); Serial.println(rightSpeed);
+        // Serial.print("Current Yaw: "); Serial.print(current_Yaw);
+        // Serial.print(" Target Yaw: "); Serial.print(targetYaw_straight);
+        // Serial.print(" Error: "); Serial.print(error_straight);
+        // Serial.print(" PID Output: "); Serial.print(output);
+        // Serial.print(" Left Speed: "); Serial.print(leftSpeed);
+        // Serial.print(" Right Speed: "); Serial.println(rightSpeed);
     }
 
     ao(); delay(10);
@@ -236,6 +313,18 @@ void MoveStraightDirection(int Movedirection, int targetYaw_straight, int speedB
             break;
         case 3: // W (West)
             targetYaw_MovePID = currentYaw - 90;
+            break;
+        case 4: // W (West)
+            targetYaw_MovePID = currentYaw - 135;
+            break;
+        case 5: // W (West)
+            targetYaw_MovePID = currentYaw - 45;
+            break;
+        case 6: // W (West)
+            targetYaw_MovePID = currentYaw + 45;
+            break;
+        case 7: // W (West)
+            targetYaw_MovePID = currentYaw + 135;
             break;
     }
 
@@ -367,6 +456,18 @@ void MoveStraightDirection_Encoder(int Movedirection, int targetYaw_straight, in
             break;
         case 3: // W (West)
             targetYaw_MovePID = currentYaw - 90;
+            break;
+        case 4: // W (West)
+            targetYaw_MovePID = currentYaw - 135;
+            break;
+        case 5: // W (West)
+            targetYaw_MovePID = currentYaw - 45;
+            break;
+        case 6: // W (West)
+            targetYaw_MovePID = currentYaw + 45;
+            break;
+        case 7: // W (West)
+            targetYaw_MovePID = currentYaw + 135;
             break;
     }
     targetYaw_MovePID = normalizeAngle(targetYaw_MovePID);
