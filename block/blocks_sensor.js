@@ -134,7 +134,8 @@ Blockly.Blocks['TCS_color_status_B'] = {
 Blockly.Blocks['IMU_begin'] = {
   init: function() {
     this.appendDummyInput()
-        .appendField("IMU begin and calcGyroOffsets");
+        .appendField("IMU begin , calcGyroOffsets and setmode ")
+        .appendField(new Blockly.FieldDropdown([["4WD","0"],["2WD","1"]]), "Mode");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(65);
@@ -179,8 +180,11 @@ Blockly.Blocks['IMU_getData'] = {
   };
 Blockly.Blocks['IMU_TurnPID'] = {
   init: function() {
+  	this.appendDummyInput()
+          .appendField("")
+    	  .appendField(new Blockly.FieldDropdown([["Spin","0"],["Turn","1"]]), "condition");
     this.appendDummyInput()
-        .appendField("TurnPID angle=");
+        .appendField(" PID angle=");
     this.appendValueInput("S0")
       .setCheck("Number")
       .appendField("");
@@ -205,8 +209,11 @@ Blockly.Blocks['IMU_TurnPID'] = {
 };
 Blockly.Blocks['IMU_TurnByDirection'] = {
   init: function() {
+  	
     this.appendDummyInput()
-          .appendField("Turn to Direction=")
+    	  .appendField("")
+    	  .appendField(new Blockly.FieldDropdown([["Spin","0"],["Turn","1"]]), "condition")
+          .appendField("to Direction=")
           .appendField(new Blockly.FieldDropdown([["⬆ turn_180","0"],["➡ turn_270","1"], ["⬇ turn_390","2"], ["⬅ turn_90","3"],
                                                   ["⬋ turn_45","4"],["⬉ turn_135","5"], ["⬈ turn_225","6"], ["⬊ turn_315","7"]]), "direction");
     this.setPreviousStatement(true, null);
@@ -219,7 +226,9 @@ Blockly.Blocks['IMU_TurnByDirection'] = {
 Blockly.Blocks['IMU_TurnByAngle'] = {
   init: function() {
     this.appendDummyInput()
-          .appendField("Turn By angle =")
+    	  .appendField("")
+    	  .appendField(new Blockly.FieldDropdown([["Spin","0"],["Turn","1"]]), "condition")
+          .appendField("By angle =")
           .appendField(new Blockly.FieldDropdown([["90","0"],["-90","1"], ["180","2"], ["-180","3"], ["45","4"], ["-45","5"]]), "angle");
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -399,6 +408,68 @@ Blockly.Blocks['IMU_moveStraightDirection_Encoder'] = {
     this.setTooltip("");
   }
 };
+
+Blockly.Blocks['IMU_moveStraightPID_step'] = {
+  init: function() {
+    
+    this.appendDummyInput()
+          .appendField("Move  ")
+          .appendField(new Blockly.FieldDropdown([["⬆ Forward","0"],["⬇ Backward","1"]]), "dir");
+    this.appendValueInput("S0")
+      .setCheck("Number")
+      .appendField("At Angle=");
+
+    this.appendValueInput("S2")
+    	.setCheck("Boolean")
+      .appendField("until logic=");
+
+    
+    this.appendValueInput("S1")
+      .setCheck("Number")
+      .appendField("speed=");
+    this.appendValueInput("S3")
+      .setCheck("Number")
+      .appendField("KP=");
+    this.appendValueInput("S5")
+      .setCheck("Number")
+      .appendField("KD=");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(67);
+    this.setTooltip("");
+  }
+};
+Blockly.Blocks['IMU_moveStraightDirection_step'] = {
+  init: function() {
+    
+    this.appendDummyInput()
+          .appendField("Move  ")
+          .appendField(new Blockly.FieldDropdown([["⬆ Forward","0"],["⬇ Backward","1"]]), "dir");
+    this.appendDummyInput()
+          .appendField("At ")
+          .appendField(new Blockly.FieldDropdown([["⬆ North","0"],["➡ East","1"], ["⬇ South","2"], ["⬅ West","3"],
+                                                ["⬋ SW","4"],["⬉ NW","5"], ["⬈ NE","6"], ["⬊ SE","7"]]), "angle");
+    this.appendValueInput("S2")
+      .appendField("until logic=");
+    this.appendValueInput("S1")
+      .setCheck("Number")
+      .appendField("speed=");
+    this.appendValueInput("S3")
+      .setCheck("Number")
+      .appendField("KP=");
+    this.appendValueInput("S5")
+      .setCheck("Number")
+      .appendField("KD=");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(67);
+    this.setTooltip("");
+  }
+};
+
+
 
 Blockly.Blocks['reset_Encoder'] = {
   init: function() {

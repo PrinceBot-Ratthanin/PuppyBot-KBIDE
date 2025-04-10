@@ -119,7 +119,7 @@ module.exports = {
                       `<block type="IMU_moveStraightPID">
                             <value name="S0">
                                 <shadow type="math_number">
-                                    <field name="NUM">90</field>
+                                    <field name="NUM">180</field>
                                 </shadow>
                             </value>
                             <value name="S1">
@@ -129,7 +129,7 @@ module.exports = {
                             </value>
                             <value name="S2">
                                 <shadow type="math_number">
-                                    <field name="NUM">2000</field>
+                                    <field name="NUM">1000</field>
                                 </shadow>
                             </value>
                             <value name="S3">
@@ -182,7 +182,7 @@ module.exports = {
                       `<block type="IMU_moveStraightPID_Encoder">
                             <value name="S0">
                                 <shadow type="math_number">
-                                    <field name="NUM">90</field>
+                                    <field name="NUM">180</field>
                                 </shadow>
                             </value>
                             <value name="S1">
@@ -241,6 +241,82 @@ module.exports = {
                             </value>
                         </block>`
               },
+              {xml:
+                      `<block type="IMU_moveStraightPID_step">
+                            <value name="S0">
+                                <shadow type="math_number">
+                                    <field name="NUM">180</field>
+                                </shadow>
+                            </value>
+                            <value name="S1">
+                                <shadow type="math_number">
+                                    <field name="NUM">50</field>
+                                </shadow>
+                            </value>
+                            <value name="S2">
+                              <block type="logic_compare">
+                                <field name="OP">LT</field>
+                                <value name="A">
+                                  <block type="Light_Sensor" />
+                                </value>
+                                <value name="B">
+                                  <shadow type="math_number">
+                                    <field name="NUM">500</field>
+                                  </shadow>
+                                </value>
+                              </block>
+                            </value>
+                            <value name="S3">
+                                <shadow type="math_number">
+                                    <field name="NUM">1</field>
+                                </shadow>
+                            </value>
+                            <value name="S4">
+                                <shadow type="math_number">
+                                    <field name="NUM">0</field>
+                                </shadow>
+                            </value>
+                             <value name="S5">
+                                <shadow type="math_number">
+                                    <field name="NUM">0.5</field>
+                                </shadow>
+                            </value>
+                        </block>`
+              },
+
+              {xml:
+                      `<block type="IMU_moveStraightDirection_step">
+                            <value name="S1">
+                                <shadow type="math_number">
+                                    <field name="NUM">50</field>
+                                </shadow>
+                            </value>
+                            <value name="S2">
+                              <block type="logic_compare">
+                                <field name="OP">LT</field>
+                                <value name="A">
+                                  <block type="Light_Sensor" />
+                                </value>
+                                <value name="B">
+                                  <shadow type="math_number">
+                                    <field name="NUM">500</field>
+                                  </shadow>
+                                </value>
+                              </block>
+                            </value>
+                            <value name="S3">
+                                <shadow type="math_number">
+                                    <field name="NUM">1</field>
+                                </shadow>
+                            </value>
+                             <value name="S5">
+                                <shadow type="math_number">
+                                    <field name="NUM">0.5</field>
+                                </shadow>
+                            </value>
+                        </block>`
+              },
+              // 
               'read_Encoder',
               'reset_Encoder',
                 

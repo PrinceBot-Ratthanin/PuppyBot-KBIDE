@@ -52,8 +52,8 @@ Blockly.JavaScript['Ultrasonic_sensor'] = function(block) {
 };
 
 Blockly.JavaScript['IMU_begin'] = function(block) {  
-
-  var code = '#SETUP initIMU();\nupdateIMU_fine_offset_Yaw(200); #END\n';
+  var dropdown_Mode = block.getFieldValue('Mode');
+  var code = '#SETUP initIMU();\nupdateIMU_fine_offset_Yaw(200);Set_Mode_Gyro = ('+dropdown_Mode+');  #END\n';
   return code;
 };
 Blockly.JavaScript['IMU_update'] = function(block) {  
@@ -78,7 +78,7 @@ Blockly.JavaScript['IMU_getData'] = function(block) {
       if(dropdown_axis == '2'){code += `getYaw()`}
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
-Blockly.JavaScript['IMU_TurnPID'] = function(block) {
+Blockly.JavaScript['IMU_set_dataFor_turnDirection'] = function(block) {
   var value_s0 = Blockly.JavaScript.valueToCode(block, 'S0', Blockly.JavaScript.ORDER_ATOMIC) || '0';
   var value_s1 = Blockly.JavaScript.valueToCode(block, 'S1', Blockly.JavaScript.ORDER_ATOMIC) || '0';
   var value_s2 = Blockly.JavaScript.valueToCode(block, 'S2', Blockly.JavaScript.ORDER_ATOMIC) || '0';
@@ -86,7 +86,20 @@ Blockly.JavaScript['IMU_TurnPID'] = function(block) {
   var value_s4 = Blockly.JavaScript.valueToCode(block, 'S4', Blockly.JavaScript.ORDER_ATOMIC) || '0';
   var code = '';
   //code += 'PID_NumPin = ' + value_numSensor+';\t';
-  code += 'turnPID('+value_s0+','+value_s1+','+value_s2+','+value_s3+','+value_s4+');\n';
+  code += 'set_data_for_turnDirection('+value_s4+','+value_s0+','+value_s1+','+value_s2+','+value_s3+');\n';
+  return code;
+};
+
+Blockly.JavaScript['IMU_TurnPID'] = function(block) {
+  var value_s0 = Blockly.JavaScript.valueToCode(block, 'S0', Blockly.JavaScript.ORDER_ATOMIC) || '0';
+  var value_s1 = Blockly.JavaScript.valueToCode(block, 'S1', Blockly.JavaScript.ORDER_ATOMIC) || '0';
+  var value_s2 = Blockly.JavaScript.valueToCode(block, 'S2', Blockly.JavaScript.ORDER_ATOMIC) || '0';
+  var value_s3 = Blockly.JavaScript.valueToCode(block, 'S3', Blockly.JavaScript.ORDER_ATOMIC) || '0';
+  var value_s4 = Blockly.JavaScript.valueToCode(block, 'S4', Blockly.JavaScript.ORDER_ATOMIC) || '0';
+  var dropdown_condition = block.getFieldValue('condition');
+  var code = '';
+  //code += 'PID_NumPin = ' + value_numSensor+';\t';
+  code += 'turnPID('+dropdown_condition+','+value_s0+','+value_s1+','+value_s2+','+value_s3+','+value_s4+');\n';
   return code;
 };
 
@@ -105,44 +118,36 @@ Blockly.JavaScript['IMU_moveStraightPID'] = function(block) {
   code += 'moveStraightPID('+dropdown_dir+','+value_s0+','+value_s1+','+value_s2+','+value_s3+','+value_s4+','+value_s5+','+checkbox_newline+');\n';
   return code;
 };
-Blockly.JavaScript['IMU_set_dataFor_turnDirection'] = function(block) {
-  var value_s0 = Blockly.JavaScript.valueToCode(block, 'S0', Blockly.JavaScript.ORDER_ATOMIC) || '0';
-  var value_s1 = Blockly.JavaScript.valueToCode(block, 'S1', Blockly.JavaScript.ORDER_ATOMIC) || '0';
-  var value_s2 = Blockly.JavaScript.valueToCode(block, 'S2', Blockly.JavaScript.ORDER_ATOMIC) || '0';
-  var value_s3 = Blockly.JavaScript.valueToCode(block, 'S3', Blockly.JavaScript.ORDER_ATOMIC) || '0';
-  var value_s4 = Blockly.JavaScript.valueToCode(block, 'S4', Blockly.JavaScript.ORDER_ATOMIC) || '0';
-  var code = '';
-  //code += 'PID_NumPin = ' + value_numSensor+';\t';
-  code += 'set_data_for_turnDirection('+value_s4+','+value_s0+','+value_s1+','+value_s2+','+value_s3+');\n';
-  return code;
-};
+
 
 Blockly.JavaScript['IMU_TurnByDirection'] = function(block) {
+  var dropdown_condition = block.getFieldValue('condition');
   var dropdown_direction = block.getFieldValue('direction');
 
   var code = ``;
-  if(dropdown_direction == '0'){code += `turn_180();`}
-  if(dropdown_direction == '1'){code += `turn_270();`}
-  if(dropdown_direction == '2'){code += `turn_360();`}
-  if(dropdown_direction == '3'){code += `turn_90();`}
-  if(dropdown_direction == '4'){code += `turn_45();`}
-  if(dropdown_direction == '5'){code += `turn_135();`}
-  if(dropdown_direction == '6'){code += `turn_225();`}
-  if(dropdown_direction == '7'){code += `turn_315();`}
+  if(dropdown_direction == '0'){code += `turn_180(${dropdown_condition});`}
+  if(dropdown_direction == '1'){code += `turn_270(${dropdown_condition});`}
+  if(dropdown_direction == '2'){code += `turn_360(${dropdown_condition});`}
+  if(dropdown_direction == '3'){code += `turn_90(${dropdown_condition});`}
+  if(dropdown_direction == '4'){code += `turn_45(${dropdown_condition});`}
+  if(dropdown_direction == '5'){code += `turn_135(${dropdown_condition});`}
+  if(dropdown_direction == '6'){code += `turn_225(${dropdown_condition});`}
+  if(dropdown_direction == '7'){code += `turn_315(${dropdown_condition});`}
 
   return code;
 };
 
 Blockly.JavaScript['IMU_TurnByAngle'] = function(block) {
   var dropdown_angle = block.getFieldValue('angle');
+  var dropdown_condition = block.getFieldValue('condition');
 
   var code = ``;
-  if(dropdown_angle == '0'){code += `turnByAngle(90);`}
-  if(dropdown_angle == '1'){code += `turnByAngle(-90);`}
-  if(dropdown_angle == '2'){code += `turnByAngle(180);`}
-  if(dropdown_angle == '3'){code += `turnByAngle(-180);`}
-  if(dropdown_angle == '4'){code += `turnByAngle(45);`}
-  if(dropdown_angle == '5'){code += `turnByAngle(-45);`}
+  if(dropdown_angle == '0'){code += `turnByAngle(90,${dropdown_condition});`}
+  if(dropdown_angle == '1'){code += `turnByAngle(-90,${dropdown_condition});`}
+  if(dropdown_angle == '2'){code += `turnByAngle(180,${dropdown_condition});`}
+  if(dropdown_angle == '3'){code += `turnByAngle(-180,${dropdown_condition});`}
+  if(dropdown_angle == '4'){code += `turnByAngle(45,${dropdown_condition});`}
+  if(dropdown_angle == '5'){code += `turnByAngle(-45,${dropdown_condition});`}
   return code;
 };
 
@@ -194,6 +199,52 @@ Blockly.JavaScript['IMU_moveStraightDirection_Encoder'] = function(block) {
   code += 'MoveStraightDirection_Encoder('+dropdown_direction+','+dropdown_angle+','+value_s1+','+value_s2+','+value_s3+','+value_s4+','+value_s5+','+checkbox_newline+');\n';
   return code;
 };
+
+// Blockly.JavaScript['IMU_moveStraightPID_condition'] = function(block) {
+//   var dropdown_dir = block.getFieldValue('dir');
+//   var value_s0 = Blockly.JavaScript.valueToCode(block, 'S0', Blockly.JavaScript.ORDER_ATOMIC) || '0';
+//   var value_s1 = Blockly.JavaScript.valueToCode(block, 'S1', Blockly.JavaScript.ORDER_ATOMIC) || '0';
+//   var value_s2 = Blockly.JavaScript.valueToCode(block, 'S2', Blockly.JavaScript.ORDER_ATOMIC) || '0';
+//   var value_s3 = Blockly.JavaScript.valueToCode(block, 'S3', Blockly.JavaScript.ORDER_ATOMIC) || '0';
+//   var value_s5 = Blockly.JavaScript.valueToCode(block, 'S5', Blockly.JavaScript.ORDER_ATOMIC) || '0';
+
+//   var code = '';
+//   //code += 'PID_NumPin = ' + value_numSensor+';\t';
+//   code += 'moveStraightPID_condition('+dropdown_dir+','+value_s0+','+value_s1+','+value_s2+','+value_s3+','+value_s5+');\n';
+//   return code;
+// };
+Blockly.JavaScript['IMU_moveStraightPID_step'] = function(block) {
+  var dropdown_dir = block.getFieldValue('dir');
+  //var dropdown_angle = block.getFieldValue('angle');
+  var value_s0 = Blockly.JavaScript.valueToCode(block, 'S0', Blockly.JavaScript.ORDER_ATOMIC) || '0';
+  var value_s1 = Blockly.JavaScript.valueToCode(block, 'S1', Blockly.JavaScript.ORDER_ATOMIC) || '0';
+  var value_s2 = Blockly.JavaScript.valueToCode(block, 'S2', Blockly.JavaScript.ORDER_ATOMIC) || '0';
+  var value_s3 = Blockly.JavaScript.valueToCode(block, 'S3', Blockly.JavaScript.ORDER_ATOMIC) || '0';
+  var value_s5 = Blockly.JavaScript.valueToCode(block, 'S5', Blockly.JavaScript.ORDER_ATOMIC) || '0';
+
+  var code = '';
+  code += 'while(!'+value_s2+'){\n';
+  code += 'moveStraightPID_step('+dropdown_dir+','+value_s0+','+value_s1+','+value_s3+','+value_s5+');\n';
+  code += '}ao();';
+  return code;
+};
+Blockly.JavaScript['IMU_moveStraightDirection_step'] = function(block) {
+  var dropdown_dir = block.getFieldValue('dir');
+  var dropdown_angle = block.getFieldValue('angle');
+  var value_s0 = Blockly.JavaScript.valueToCode(block, 'S0', Blockly.JavaScript.ORDER_ATOMIC) || '0';
+  // var value_s1 = Blockly.JavaScript.valueToCode(block, 'S1', Blockly.JavaScript.ORDER_ATOMIC) || '0';
+  var value_s2 = Blockly.JavaScript.valueToCode(block, 'S2', Blockly.JavaScript.ORDER_ATOMIC) || '0';
+  var value_s3 = Blockly.JavaScript.valueToCode(block, 'S3', Blockly.JavaScript.ORDER_ATOMIC) || '0';
+  var value_s5 = Blockly.JavaScript.valueToCode(block, 'S5', Blockly.JavaScript.ORDER_ATOMIC) || '0';
+
+  var code = '';
+  code += 'while(!'+value_s2+'){\n';
+  code += 'MoveStraightDirection_step('+dropdown_dir+','+value_s0+','+dropdown_angle+','+value_s3+','+value_s5+');\n';
+  code += '}ao();';
+  return code;
+};
+
+
 
 Blockly.JavaScript['reset_Encoder'] = function(block) {  
   var code = '#SETUP init_encoder();\n#END\n resetEncoder();\n';
