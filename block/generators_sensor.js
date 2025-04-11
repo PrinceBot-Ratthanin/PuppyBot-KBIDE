@@ -238,7 +238,7 @@ Blockly.JavaScript['IMU_moveStraightDirection_step'] = function(block) {
 
   var code = '';
   code += 'while(!'+value_s2+'){\n';
-  code += 'MoveStraightDirection_step('+dropdown_dir+','+value_s1+','+dropdown_angle+','+value_s3+','+value_s5+');\n';
+  code += 'MoveStraightDirection_step('+dropdown_dir+','+dropdown_angle+','+value_s1+','+value_s3+','+value_s5+');\n';
   code += '}ao();';
   return code;
 };
